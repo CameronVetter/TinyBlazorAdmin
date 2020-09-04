@@ -1,6 +1,8 @@
 @page "/urlmanager"
 @using TinyBlazorAdmin.Data
+@using Microsoft.AspNetCore.Authorization
 @inject IJSRuntime JSRuntime;
+@attribute [Authorize]
 
 @inject AzFuncClient azClient
 
@@ -176,6 +178,7 @@ else
         UrlList = await azClient.GetUrlList();
     }
 
+    [Authorize(Roles = "admin")]
     void CreateShortUrl()
     {
         shortUrlRequest = new ShortUrlRequest();
@@ -183,12 +186,14 @@ else
     }
 
 
+    [Authorize(Roles = "admin")]
     void EditShortUrl(ShortUrlEntity urlEntity)
     {
         editedUrl = urlEntity;
         ShowEditPopup = true;
     }
 
+    [Authorize(Roles = "admin")]
     public async Task ArchiveShortUrl(ShortUrlEntity urlEntity)
     {
         await azClient.ArchiveShortUrl(urlEntity);
